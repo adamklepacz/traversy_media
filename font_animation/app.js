@@ -63,3 +63,31 @@ function fillHourglass() {
 fillHourglass();
 
 setInterval(fillHourglass, 1500);
+
+//animate thermometere
+function tempRise() {
+	let thermo = document.getElementById('thermometer');
+	
+	thermo.innerHTML = "&#xf2cb;";
+	
+	setTimeout(function() {
+		thermo.innerHTML = "&#xf2ca;";
+	},500);
+	
+	
+	setTimeout(function() {
+		thermo.innerHTML = "&#xf2c9;";
+	},1000);
+	
+	setTimeout(function() {
+		thermo.innerHTML = "&#xf2c8;";
+	},1500);
+	
+	setTimeout(function() {
+		thermo.innerHTML = "&#xf2c7;";
+	},2000);
+}
+
+tempRise();
+
+setInterval(tempRise, 2500);
