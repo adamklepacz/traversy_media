@@ -1,6 +1,25 @@
+function manageOutputDiv() {
+	//get data from input
+	var location = document.getElementById('location-input').value;
+	
+	//hide cards when input is empty
+	var dataOutput = document.getElementById('data-output');
+	if(location == "") {
+		dataOutput.style.visibility = "hidden";
+	} else {
+		dataOutput.style.visibility = "visible";
+	}
+}
 
-function getCode() {
-	var location = 'Wrocław mosiężna';
+function getCode(e) {
+	
+	//Prevent from submiting the form
+	e.preventDefault();
+	
+	//get data from input
+	var location = document.getElementById('location-input').value;
+
+	//use axios librart for http request
 	axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
 		params: {
 			address: location,
@@ -8,9 +27,6 @@ function getCode() {
 		}
 	})
 	.then(function(response) {
-		//log for response
-		console.log(response);
-		
 		// Formatted adress
 	  var formattedAddress = response.data.results[0].formatted_address,
 				formattedAddressOutput = `
@@ -31,10 +47,21 @@ function getCode() {
 		
 		addressComponentsOutput += '</ul>';
 		
+		// Formatted geolocation
+	  var lat = response.data.results[0].geometry.location.lat,
+				lng = response.data.results[0].geometry.location.lng,
+		
+				geometryOutput = `
+					<ul class="list-group">
+						<li class="list-group-item"><strong>Latitude:&nbsp</strong>${lat}</li>
+						<li class="list-group-item"><strong>Longitude:&nbsp</strong>${lng}</li>
+					</ul>
+				`;
+		
 		//Output to app
 		document.getElementById('formatted-address').innerHTML = formattedAddressOutput;
 		document.getElementById('address-components-tab').innerHTML = addressComponentsOutput;
-		console.log(addressComponents[1]);
+		document.getElementById('address-geometry').innerHTML = geometryOutput;
 	})
 	.catch(function(error) {
 		console.log(error);
@@ -43,4 +70,7 @@ function getCode() {
 
 
 //call geCode
-getCode();
+document.getElementById('location-form').addEventListener('submit', getCode);
+document.getElementById('location-form').addEventListener('submit', manageOutputDiv);
+document.getElementById('location-input').addEventListener('change', manageOutputDiv);
+window.addEventListener('load', manageOutputDiv);
